@@ -42,23 +42,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: ASP-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_75BB5DC0B2B248F1A8D61BE66E2EC2A5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EA715731E8874D919C0FDD5D2593C9C2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5B18DB0282C242EC8446B248527568E6 }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -66,4 +56,4 @@ jobs:
           app-name: 'ERivera'
           slot-name: 'Production'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_23BE74A3DE4E4C9FB5F5A6545F2E26C7 }}
